@@ -9,7 +9,7 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.test.AndroidTestCase;
 
-import com.gesoftware.smsforwarder.receiver.SMSBroadcastReceiver;
+import com.gesoftware.smsforwarder.SMSBroadcastReceiver;
 
 /**
  * @author Sharon
