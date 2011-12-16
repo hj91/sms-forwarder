@@ -3,5 +3,7 @@
 
     <string name="hello">Hello World, SMSForwarderActivity!</string>
     <string name="app_name">SMS Forwarder</string>
+    <string name="set_preferences">Configure SMS Forwarding</string>
+    <string name="configure">Configure</string>
 
 </resources>
