@@ -1,13 +1,20 @@
 package com.gesoftware.smsforwarder;
 
+import com.gesoftware.smsforwarder.R;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.Toast;
+
 
 public class SMSForwarderActivity extends Activity {
 
@@ -31,6 +38,17 @@ public class SMSForwarderActivity extends Activity {
 				}
 			}
 		}, new IntentFilter(SMSForwarderConstants.SEND_MSG_INTENT));
+		
+		Button prefBtn = (Button) findViewById(R.id.prefButton);
+		prefBtn.setOnClickListener(new OnClickListener() {
+		
+		        public void onClick(View v) {
+		                Intent settingsActivity = new Intent(getBaseContext(),
+		                                Preferences.class);
+		                startActivity(settingsActivity);
+		        }
+		});
+
 	}
 
 	/**
@@ -41,6 +59,14 @@ public class SMSForwarderActivity extends Activity {
 
 		String msgSubject = "SMS From " + originatingAddress;
 		String msgBody = string;
+
+        // Get the xml/preferences.xml preferences
+        SharedPreferences prefs = PreferenceManager
+	                         .getDefaultSharedPreferences(getBaseContext());
+
+        String username = prefs.getString("usernamePref", "");
+        String password = prefs.getString("passwordPref", "");
+        String forwardingAddress = prefs.getString("emailAddressPref", "");
 
 		/*
 		 * final Intent emailIntent = new
@@ -56,13 +82,13 @@ public class SMSForwarderActivity extends Activity {
 		 * 
 		 * startActivity(Intent.createChooser(emailIntent, "Send mail..."));
 		 */
-		Mail m = new Mail("gary.evely@gmail.com", "signalsgaz1");
+		Mail m = new Mail(username, password);
 
-		String[] toArr = { "gary.evely@blueyonder.co.uk" };
+		String[] toArr = { forwardingAddress };
 		m.setTo(toArr);
 		m.setFrom(originatingAddress);
 		m.setSubject(msgSubject);
-		m.setBody(msgBody);
+		m.setBody(msgBody);  
 
 		try {
 			if (m.send()) {

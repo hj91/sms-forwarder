@@ -22,6 +22,12 @@
             </intent-filter>
         </activity>
         
+        
+<activity
+        android:name=".Preferences"
+        android:label="@string/set_preferences">
+</activity>
+        
         <receiver android:name=".SMSBroadcastReceiver"> 
             <intent-filter> 
                 <action android:name="android.provider.Telephony.SMS_RECEIVED" /> 
