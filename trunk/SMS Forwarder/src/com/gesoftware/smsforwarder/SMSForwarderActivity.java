@@ -65,7 +65,7 @@ public class SMSForwarderActivity extends Activity {
 	                         .getDefaultSharedPreferences(getBaseContext());
 
         String username = prefs.getString("usernamePref", "");
-        String password = prefs.getString("passwordPref", "");
+        String password = prefs.getString("passPref", "");
         String forwardingAddress = prefs.getString("emailAddressPref", "");
 
 		/*
