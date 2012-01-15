@@ -20,42 +20,49 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
+import android.content.Context;
+
 public class Mail extends javax.mail.Authenticator {
-	private String _user;
-	private String _pass;
+	
+	private Context mContext;
+	
+	private String mUsername;
+	private String mPassword;
 
-	private String[] _to;
-	private String _from;
+	private String[] mRecipients;
+	private String mSender;
 
-	private String _port;
-	private String _sport;
+	private String mPort;
+	private String mSocketPort;
 
-	private String _host;
+	private String mHost;
 
-	private String _subject;
-	private String _body;
+	private String mSubject;
+	private String mBody;
 
-	private boolean _auth;
+	private boolean mAuth;
 
-	private boolean _debuggable;
+	private boolean mDebug;
 
-	private Multipart _multipart;
+	private Multipart mMultipart;
 
-	public Mail() {
-		_host = "smtp.gmail.com"; // default smtp server
-		_port = "465"; // default smtp port
-		_sport = "465"; // default socketfactory port
+	public Mail(Context context) {
+		mContext = context;
+		
+		mHost = mContext.getString(R.string.host); // default smtp server
+		mPort = mContext.getString(R.string.smtpPort); // default smtp port
+		mSocketPort = mContext.getString(R.string.socketFactoryPort); // default socketfactory port
 
-		_user = ""; // username
-		_pass = ""; // password
-		_from = ""; // email sent from
-		_subject = ""; // email subject
-		_body = ""; // email body
+		mUsername = ""; // username
+		mPassword = ""; // password
+		mSender = ""; // email sent from
+		mSubject = ""; // email subject
+		mBody = ""; // email body
 
-		_debuggable = false; // debug mode on or off - default off
-		_auth = true; // smtp authentication - default on
+		mDebug = false; // debug mode on or off - default off
+		mAuth = true; // smtp authentication - default on
 
-		_multipart = new MimeMultipart();
+		mMultipart = new MimeMultipart();
 
 		// There is something wrong with MailCap, javamail can not find a
 		// handler for the multipart/mixed part, so this bit needs to be added.
@@ -69,41 +76,41 @@ public class Mail extends javax.mail.Authenticator {
 		CommandMap.setDefaultCommandMap(mc);
 	}
 
-	public Mail(String user, String pass) {
-		this();
+	public Mail(Context context, String username, String password) {
+		this(context);
 
-		_user = user;
-		_pass = pass;
+		mUsername = username;
+		mPassword = password;
 	}
 
 	public boolean send() throws Exception {
 		Properties props = _setProperties();
 
-		if (!_user.equals("") && !_pass.equals("") && _to.length > 0
-				&& !_from.equals("") && !_subject.equals("")
-				&& !_body.equals("")) {
+		if (!mUsername.equals("") && !mPassword.equals("") && mRecipients.length > 0
+				&& !mSender.equals("") && !mSubject.equals("")
+				&& !mBody.equals("")) {
 			Session session = Session.getInstance(props, this);
 
 			MimeMessage msg = new MimeMessage(session);
 
-			msg.setFrom(new InternetAddress(_from));
+			msg.setFrom(new InternetAddress(mSender));
 
-			InternetAddress[] addressTo = new InternetAddress[_to.length];
-			for (int i = 0; i < _to.length; i++) {
-				addressTo[i] = new InternetAddress(_to[i]);
+			InternetAddress[] addressTo = new InternetAddress[mRecipients.length];
+			for (int i = 0; i < mRecipients.length; i++) {
+				addressTo[i] = new InternetAddress(mRecipients[i]);
 			}
 			msg.setRecipients(MimeMessage.RecipientType.TO, addressTo);
 
-			msg.setSubject(_subject);
+			msg.setSubject(mSubject);
 			msg.setSentDate(new Date());
 
 			// setup message body
 			BodyPart messageBodyPart = new MimeBodyPart();
-			messageBodyPart.setText(_body);
-			_multipart.addBodyPart(messageBodyPart);
+			messageBodyPart.setText(mBody);
+			mMultipart.addBodyPart(messageBodyPart);
 
 			// Put parts in message
-			msg.setContent(_multipart);
+			msg.setContent(mMultipart);
 
 			// send email
 			Transport.send(msg);
@@ -120,67 +127,70 @@ public class Mail extends javax.mail.Authenticator {
 		messageBodyPart.setDataHandler(new DataHandler(source));
 		messageBodyPart.setFileName(filename);
 
-		_multipart.addBodyPart(messageBodyPart);
+		mMultipart.addBodyPart(messageBodyPart);
 	}
 
 	@Override
 	public PasswordAuthentication getPasswordAuthentication() {
-		return new PasswordAuthentication(_user, _pass);
+		return new PasswordAuthentication(mUsername, mPassword);
 	}
 
 	private Properties _setProperties() {
 		Properties props = new Properties();
 
-		props.put("mail.smtp.host", _host);
+		props.put(mContext.getString(R.string.propHost), mHost);
 
-		if (_debuggable) {
-			props.put("mail.debug", "true");
+		if (mDebug) {
+			props.put(mContext.getString(R.string.propDebug), "true");
 		}
 
-		if (_auth) {
-			props.put("mail.smtp.auth", "true");
+		if (mAuth) {
+			props.put(mContext.getString(R.string.propAuth), "true");
 		}
 
-		props.put("mail.smtp.port", _port);
-		props.put("mail.smtp.socketFactory.port", _sport);
-		props.put("mail.smtp.socketFactory.class",
+		props.put(mContext.getString(R.string.propSmtpPort), mPort);
+		props.put(mContext.getString(R.string.propSocketFactoryPort), mSocketPort);
+		props.put(mContext.getString(R.string.propSocketFactoryClass),
 				"javax.net.ssl.SSLSocketFactory");
-		props.put("mail.smtp.socketFactory.fallback", "false");
+		props.put(mContext.getString(R.string.propSocketFactoryFallback), "false");
 
 		return props;
 	}
 
 	// the getters and setters
 	public String getBody() {
-		return _body;
+		return mBody;
 	}
 
-	public void setBody(String _body) {
-		this._body = _body;
+	public void setBody(String body) {
+		this.mBody = body;
 	}
 
 	public String getSubject() {
-		return _subject;
+		return mSubject;
 	}
 
-	public void setSubject(String _subject) {
-		this._subject = _subject;
+	public void setSubject(String subject) {
+		this.mSubject = subject;
 	}
 
-	public String getFrom() {
-		return _from;
+	public String getSender() {
+		return mSender;
 	}
 
-	public void setFrom(String _from) {
-		this._from = _from;
+	public void setSender(String sender) {
+		this.mSender = sender;
 	}
 
-	public String[] getTo() {
-		return _to;
+	public String[] getRecipients() {
+		return mRecipients;
 	}
 
-	public void setTo(String[] _to) {
-		this._to = _to;
+	public void setRecipients(String[] recipients) {
+		this.mRecipients = new String[recipients.length];
+		for (int i = 0; i < recipients.length; i++) {
+			this.mRecipients[i] = recipients[i];
+		}
 	}
 
 }

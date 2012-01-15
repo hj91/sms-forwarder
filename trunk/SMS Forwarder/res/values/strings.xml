@@ -1,9 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    <string name="hello">Hello World, SMSForwarderActivity!</string>
     <string name="app_name">SMS Forwarder</string>
     <string name="set_preferences">Configure SMS Forwarding</string>
     <string name="configure">Configure</string>
+    <string name="host">smtp.gmail.com</string>
+    <string name="smtpPort">465</string>
+    <string name="socketFactoryPort">465</string>
+    <string name="propHost">mail.smtp.host</string>
+    <string name="propDebug">mail.debug</string>
+    <string name="propAuth">mail.smtp.auth</string>
+    <string name="propSmtpPort">mail.smtp.port</string>
+    <string name="propSocketFactoryPort">mail.smtp.socketFactory.port</string>
+    <string name="propSocketFactoryClass">mail.smtp.socketFactory.class</string>
+    <string name="propSocketFactoryFallback">mail.smtp.socketFactory.fallback</string>
+    <string name="msg_email_fail">Email was not sent</string>
+    <string name="msg_email_send_exception">Could not send email - </string>
+    <string name="widget_status">unknown</string>
+    <string name="widget_status_enabled">Enabled</string>
+    <string name="widget_status_disabled">Disabled</string>
 
 </resources>

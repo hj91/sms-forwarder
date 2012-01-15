@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/smswidget"
+    android:layout_width="72dip"
+    android:layout_height="72dip"
+    android:focusable="true"
+    android:background="@drawable/appwidget_dark_bg" >
+
+    <ImageView
+        android:id="@+id/icon"
+        android:layout_width="wrap_content"
+        android:layout_height="30dip"
+        android:layout_marginTop="5dip"
+        android:layout_marginLeft="5dip"
+        android:layout_marginRight="5dip"
+        android:layout_marginBottom="0dip"
+        android:clickable="true"
+        android:src="@drawable/icon_disabled" />
+    	 
+    <TextView
+        android:id="@+id/configure_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/icon"
+        android:layout_marginTop="2dip"
+        android:layout_marginLeft="5dip"
+        android:layout_marginRight="0dip"
+        android:layout_marginBottom="0dip"
+        android:clickable="true"
+        android:text="Configure"
+        style="@style/WidgetText" /> 
+    
+</RelativeLayout>

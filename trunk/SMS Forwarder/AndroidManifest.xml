@@ -8,9 +8,10 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.RECEIVE_SMS"/>
-
+    <uses-permission android:name="android.permission.INTERNET"/>
+    
     <application
-        android:icon="@drawable/sms_icon"
+        android:icon="@drawable/ic_launcher"
         android:label="@string/app_name" >
         <activity
             android:label="@string/app_name"
@@ -23,16 +24,29 @@
         </activity>
         
         
-<activity
-        android:name=".Preferences"
-        android:label="@string/set_preferences">
-</activity>
+		<activity
+		        android:name=".Preferences"
+		        android:label="@string/set_preferences">
+		</activity>
         
         <receiver android:name=".SMSBroadcastReceiver"> 
             <intent-filter> 
                 <action android:name="android.provider.Telephony.SMS_RECEIVED" /> 
             </intent-filter> 
         </receiver>
+        
+        <receiver android:name=".SMSForwarderWidgetProvider" android:label="@string/app_name">
+ 			<intent-filter>
+ 				<action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+ 				<action android:name="SMSForwarderConstants.ACTION_CONFIGURE" />
+ 				<action android:name="SMSForwarderConstants.ACTION_ENABLE_DISABLE" />
+ 			</intent-filter>
+ 			<meta-data android:name="android.appwidget.provider"
+ 				android:resource="@xml/smsforwarderwidgetprovider" />
+		</receiver>
+		
+	
+        <service android:enabled="true" android:name=".SMSForwarderControlService" />
     </application>
 
 </manifest>
