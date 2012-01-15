@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <PreferenceCategory android:title="Enable" >
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="enableForwardingPref"
+            android:summary="Enable or disable SMS forwarding."
+            android:title="Enable Forwarding" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="Configuration" >
+        <EditTextPreference
+            android:name="Email forwarding address"
+            android:defaultValue="email@provider.com"
+            android:key="emailAddressPref"
+            android:summary="Set email address to forward SMS messages to"
+            android:title="Email Address" />
+        <EditTextPreference
+            android:name="Email username"
+            android:defaultValue="username"
+            android:key="usernamePref"
+            android:summary="Username for your email account"
+            android:title="Email Username" />
+        <EditTextPreference
+            android:name="Email Password"
+            android:defaultValue="password"
+            android:key="passPref"
+            android:password="true"
+            android:summary="Password for your email account"
+            android:title="Enter Password" />
+    </PreferenceCategory>
+
+</PreferenceScreen>

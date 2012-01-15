@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+ 
+    <style name="WidgetBackground_1_1">
+        <item name="android:background">@drawable/appwidget_dark_bg</item>
+    </style>
+ 
+    <style name="WidgetTitle">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+ 
+    <style name="WidgetText">
+        <item name="android:textSize">10sp</item>
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+ 
+</resources>
