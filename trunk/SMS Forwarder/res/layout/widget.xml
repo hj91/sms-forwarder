@@ -16,18 +16,17 @@
         android:layout_marginBottom="0dip"
         android:clickable="true"
         android:src="@drawable/icon_disabled" />
-    	 
-    <TextView
+    	     <TextView
         android:id="@+id/configure_text"
+        style="@style/WidgetText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/icon"
+        android:layout_alignRight="@+id/icon"
         android:layout_below="@id/icon"
-        android:layout_marginTop="2dip"
-        android:layout_marginLeft="5dip"
-        android:layout_marginRight="0dip"
         android:layout_marginBottom="0dip"
+        android:layout_marginTop="2dip"
         android:clickable="true"
-        android:text="Configure"
-        style="@style/WidgetText" /> 
+        android:text="@string/configure" />
     
 </RelativeLayout>
