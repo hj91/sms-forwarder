@@ -3,10 +3,16 @@
  */
 package com.gesoftware.smsforwarder;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.telephony.SmsMessage;
@@ -17,6 +23,8 @@ import android.util.Log;
  * 
  */
 public class SMSBroadcastReceiver extends BroadcastReceiver {
+	
+	private boolean tempInternetConnection = false;
 
 	/*
 	 * (non-Javadoc)
@@ -60,6 +68,11 @@ public class SMSBroadcastReceiver extends BroadcastReceiver {
 	 */
 	final private void forwardSmsToEmail(Context context,
 			String originatingAddress, String string) {
+		
+		if (!isNetworkConnected(context)) {
+			tempInternetConnection = true;
+			enableInternet(context, true); 
+		}
 
 		String msgSubject = "SMS From " + originatingAddress;
 		String msgBody = string;
@@ -89,6 +102,51 @@ public class SMSBroadcastReceiver extends BroadcastReceiver {
 			Log.e(SMSForwarderConstants.TAG,
 					context.getString(R.string.msg_email_send_exception), e);
 		}
+		
+		if (tempInternetConnection && isNetworkConnected(context)) {
+			tempInternetConnection = false;
+			// Close any open network connection
+			enableInternet(context, false);
+		}
 	}
 
+	private boolean isNetworkConnected(Context context) {         
+		
+		ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);         
+		NetworkInfo network = cm.getActiveNetworkInfo();         
+		if (network != null) {             
+			return network.isAvailable();         
+		}         
+		
+		return false;     
+	} 
+
+	private void enableInternet(Context context, boolean enable) {
+		WifiManager wifiManager = (WifiManager)context.getSystemService(Context.WIFI_SERVICE); 
+		wifiManager.setWifiEnabled(enable); 
+		
+		try {
+			ConnectivityManager mgr = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE); 
+			Method dataMtd;
+			dataMtd = ConnectivityManager.class.getDeclaredMethod("setMobileDataEnabled", boolean.class);
+			dataMtd.setAccessible(true); 
+			dataMtd.invoke(mgr, enable);  
+			
+		} catch (SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NoSuchMethodException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 }

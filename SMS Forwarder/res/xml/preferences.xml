@@ -5,8 +5,8 @@
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="enableForwardingPref"
-            android:summary="Enable or disable SMS forwarding."
-            android:title="Enable Forwarding" />
+            android:summary="SMS forwarding enabled or disabled."
+            android:title="Forwarding Enabled" android:selectable="false" android:enabled="false"/>
     </PreferenceCategory>
     <PreferenceCategory android:title="Configuration" >
         <EditTextPreference

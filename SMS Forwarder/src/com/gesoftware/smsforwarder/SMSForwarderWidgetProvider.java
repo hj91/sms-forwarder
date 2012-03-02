@@ -37,7 +37,7 @@ public class SMSForwarderWidgetProvider extends AppWidgetProvider {
 
 		// Update the widgets via the service
 		context.startService(intent);
-			
+		
 	}
 	
 	@Override

@@ -61,6 +61,15 @@ public class SMSForwarderControlService extends Service {
 			remoteViews.setOnClickPendingIntent(R.id.configure_text, pendingConfigureIntent);
 			remoteViews.setOnClickPendingIntent(R.id.icon, pendingEnableIntent);
 			
+			SharedPreferences prefs = PreferenceManager
+					.getDefaultSharedPreferences(getApplicationContext());
+
+			if (prefs.getBoolean("enableForwardingPref", false)) {
+				remoteViews.setImageViewResource(R.id.icon, R.drawable.icon_enabled);
+			} else {
+				remoteViews.setImageViewResource(R.id.icon, R.drawable.icon_disabled);
+			}
+			
 			AppWidgetManager manager = AppWidgetManager.getInstance(getApplicationContext());
 			manager.updateAppWidget(thisWidget, remoteViews);
 		}
