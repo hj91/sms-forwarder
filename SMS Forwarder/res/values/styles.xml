@@ -13,7 +13,7 @@
  
     <style name="WidgetText">
         <item name="android:textSize">9sp</item>
-        <item name="android:textColor">@color/translucent_red</item>
+        <item name="android:textColor">@android:color/white</item>
     </style>
  
 </resources>

@@ -14,6 +14,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.telephony.SmsMessage;
 import android.util.Log;
@@ -33,7 +34,7 @@ public class SMSBroadcastReceiver extends BroadcastReceiver {
 	 * android.content.Intent)
 	 */
 	@Override
-	public void onReceive(Context context, Intent intent) {
+	public void onReceive(final Context context, Intent intent) {
 
 		if (intent.getAction()
 				.equals("android.provider.Telephony.SMS_RECEIVED")) {
@@ -51,11 +52,24 @@ public class SMSBroadcastReceiver extends BroadcastReceiver {
 					msgs = new SmsMessage[pdus.length];
 					for (int i = 0; i < msgs.length; i++) {
 						msgs[i] = SmsMessage.createFromPdu((byte[]) pdus[i]);
-						String strOrig = msgs[i].getOriginatingAddress();
-						String smsMessageText = msgs[i].getMessageBody()
+						final String strOrig = msgs[i].getOriginatingAddress();
+						final String smsMessageText = msgs[i].getMessageBody()
 								.toString();
 
-						forwardSmsToEmail(context, strOrig, smsMessageText);
+						if (!isNetworkConnected(context)) {
+							tempInternetConnection = true;
+							enableInternet(context, true);
+							
+							Handler handler = new Handler(); 
+							handler.postDelayed(new Runnable() { 
+								public void run() { 
+									forwardSmsToEmail(context, strOrig, smsMessageText); 
+							    } 
+							}, 2000); 
+
+						} else {
+							forwardSmsToEmail(context, strOrig, smsMessageText);
+						}
 
 					}
 				}
@@ -68,12 +82,7 @@ public class SMSBroadcastReceiver extends BroadcastReceiver {
 	 */
 	final private void forwardSmsToEmail(Context context,
 			String originatingAddress, String string) {
-		
-		if (!isNetworkConnected(context)) {
-			tempInternetConnection = true;
-			enableInternet(context, true); 
-		}
-
+	
 		String msgSubject = "SMS From " + originatingAddress;
 		String msgBody = string;
 
@@ -122,9 +131,6 @@ public class SMSBroadcastReceiver extends BroadcastReceiver {
 	} 
 
 	private void enableInternet(Context context, boolean enable) {
-		WifiManager wifiManager = (WifiManager)context.getSystemService(Context.WIFI_SERVICE); 
-		wifiManager.setWifiEnabled(enable); 
-		
 		try {
 			ConnectivityManager mgr = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE); 
 			Method dataMtd;
