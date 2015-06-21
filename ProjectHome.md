@@ -1,0 +1,1 @@
+Android app for forwarding sms messages to a configured email address
